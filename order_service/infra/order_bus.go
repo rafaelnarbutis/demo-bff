@@ -2,7 +2,7 @@ package infra
 
 import (
 	"encoding/json"
-	"github.com/streadway/amqp"
+	amqp "github.com/rabbitmq/amqp091-go"
 	"log"
 	"orderservice/models"
 	"os"
@@ -17,7 +17,7 @@ func failOnError(err error, msg string) {
 	}
 }
 
-func InitConfig() {
+func InitBusConfig() {
 
 	host := os.Getenv("RABBIT_MQ_HOST")
 
@@ -27,20 +27,18 @@ func InitConfig() {
 
 	conn, err := amqp.Dial("amqp://guest:guest@" + host + ":5672/")
 
-	log.Printf(host)
-
 	failOnError(err, "Failed to connect to RabbitMQ")
 
 	ch, err := conn.Channel()
 	failOnError(err, "Failed to open a channel")
 
 	q, err := ch.QueueDeclare(
-		"notebook-bought-queue", // name
-		false,                   // durable
-		false,                   // delete when unused
-		false,                   // exclusive
-		false,                   // no-wait
-		nil,                     // arguments
+		"order-queue", // name
+		false,         // durable
+		false,         // delete when unused
+		false,         // exclusive
+		false,         // no-wait
+		nil,           // arguments
 	)
 	failOnError(err, "Failed to declare a queue")
 
@@ -49,18 +47,18 @@ func InitConfig() {
 }
 
 func SendMessage(request models.OrderRequest) {
-	paymentJson, err := json.Marshal(request)
+	orderJson, err := json.Marshal(&request)
 
-	failOnError(err, "Failed to marshal payment")
+	failOnError(err, "Failed to marshal order")
 
 	errCh := channel.Publish(
 		"",
-		queue.Name,
+		"order-queue",
 		false,
 		false,
 		amqp.Publishing{
 			ContentType: "application/json",
-			Body:        paymentJson,
+			Body:        orderJson,
 		})
 
 	if errCh != nil {
@@ -68,5 +66,5 @@ func SendMessage(request models.OrderRequest) {
 	}
 
 	failOnError(err, "Failed to publish a message")
-	log.Printf("sending message: %s", paymentJson)
+	log.Printf("sending message: %s", orderJson)
 }

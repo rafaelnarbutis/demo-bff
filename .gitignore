@@ -45,3 +45,6 @@ go.work.sum
 
 # env file
 .env
+
+infra/mongo
+infra/volume
