@@ -1,0 +1,29 @@
+type Query {
+    items: [Item]
+    itemsById(id: String): Item
+    costumerById(id: String): Costumer
+}
+
+type Item {
+    id: String
+    name: String
+    price: Float
+}
+
+type Order {
+    id: String
+    items: [Item]
+    total: Float
+}
+
+type Costumer {
+    id: String
+    name: String
+    orders: [Order]
+}
+
+type Mutation {
+    createOrder(costumerId: String, itemsId: [String]): Boolean
+    createCostumer(name: String): Boolean
+}
+

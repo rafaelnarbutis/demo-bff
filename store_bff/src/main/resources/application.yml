@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: store
+  graphql:
+    graphiql:
+      enabled: true
+
+
+server:
+  port : 8085
+
+feing:
+  order-service:
+    url: ${ORDER_SERVICE_URL:http://localhost:8080}
+  client:
+    config:
+      default:
+        connect-timeout: 5000
+        read-timeout: 5000
+        logger-level: full
+

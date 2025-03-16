@@ -48,3 +48,38 @@ go.work.sum
 
 .docker/mongo
 .docker/volume
+
+
+store_bff/HELP.md
+store_bff/target/
+store_bff/!.mvn/wrapper/maven-wrapper.jar
+store_bff/!**/src/main/**/target/
+store_bff/!**/src/test/**/target/
+
+store_bff/### STS ###
+store_bff/.apt_generated
+store_bff/.classpath
+store_bff/.factorypath
+store_bff/.project
+store_bff/.settings
+store_bff/.springBeans
+store_bff/.sts4-cache
+
+store_bff/### IntelliJ IDEA ###
+store_bff/.idea
+store_bff/*.iws
+store_bff/*.iml
+store_bff/*.ipr
+
+store_bff/### NetBeans ###
+store_bff/nbproject/private/
+store_bff/nbbuild/
+store_bff/dist/
+store_bff/nbdist/
+store_bff/.nb-gradle/
+store_bff/build/
+store_bff/!**/src/main/**/build/
+store_bff/!**/src/test/**/build/
+
+store_bff/### VS Code ###
+store_bff/.vscode/

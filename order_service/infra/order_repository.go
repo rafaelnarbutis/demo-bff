@@ -16,9 +16,9 @@ var client *mongo.Client
 
 type orderBson struct {
 	Id       primitive.ObjectID `bson:"_id"`
-	ClientId string             `bson:"client_id"`
-	Amount   string             `bson:"amount"`
-	ItemsId  []string           `bson:"items_id"`
+	ClientId string             `bson:"clientid"`
+	Total    string             `bson:"total"`
+	ItemsId  []string           `bson:"itemsid"`
 }
 
 func InitRepositoryConfig() {
@@ -63,7 +63,7 @@ func GetOrder(id string) (models.OrderResponse, error) {
 	return models.OrderResponse{
 		Id:       orderBson.Id.Hex(),
 		ClientId: orderBson.ClientId,
-		Amount:   orderBson.Amount,
+		Total:    orderBson.Total,
 		ItemsId:  orderBson.ItemsId,
 	}, nil
 }
@@ -89,7 +89,7 @@ func GetOrders() []models.OrderResponse {
 		order := models.OrderResponse{
 			Id:       orderBson.Id.Hex(),
 			ClientId: orderBson.ClientId,
-			Amount:   orderBson.Amount,
+			Total:    orderBson.Total,
 			ItemsId:  orderBson.ItemsId,
 		}
 
