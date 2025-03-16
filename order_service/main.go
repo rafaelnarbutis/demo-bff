@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"orderservice/infra"
 	"orderservice/models"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -15,6 +16,7 @@ func main() {
 
 	router.POST("/orders", post_orders)
 	router.GET("/orders/:id", get_order)
+	router.GET("/orders", get_orders)
 
 	router.Run(":8080")
 }
@@ -41,4 +43,9 @@ func get_order(c *gin.Context) {
 		c.JSON(http.StatusNoContent, gin.H{"error": err.Error()})
 	}
 	c.JSON(200, order)
+}
+
+func get_orders(c *gin.Context) {
+	orders := infra.GetOrders()
+	c.JSON(200, orders)
 }

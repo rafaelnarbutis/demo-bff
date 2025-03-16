@@ -13,16 +13,17 @@ services:
       retries: 5
       timeout: 3s
 
-  # order-service:
-  #   restart: always
-  #   build: ../order-service
-  #   environment:
-  #     - RABBIT_MQ_HOST=rabbitmq
-  #   ports:
-  #     - 8080:8080
-  #   depends_on:
-  #     rabbitmq: 
-  #       condition: service_healthy
+  order-service:
+    restart: always
+    build: ../order_service
+    environment:
+      - RABBIT_MQ_HOST=rabbitmq
+      - MONGODB_HOST=mongo
+    ports:
+      - 8080:8080
+    depends_on:
+      rabbitmq: 
+        condition: service_healthy
 
   mongo-express:
     image: mongo-express
