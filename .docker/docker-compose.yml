@@ -6,8 +6,8 @@ services:
         - 5672:5672
         - 15672:15672
     volumes:
-        - ./volume:/var/lib/rabbitmq/
-        - ./volume:/var/log/rabbitmq
+        - rabbitmq:/var/lib/rabbitmq/
+        - rabbitmq:/var/log/rabbitmq
     healthcheck:
       test:  ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
       retries: 5
@@ -46,4 +46,9 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - ./mongo:/data/db
+      - mongo:/data/db
+
+
+volumes:
+  mongo:
+  rabbitmq:
