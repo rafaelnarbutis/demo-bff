@@ -25,6 +25,19 @@ services:
       rabbitmq: 
         condition: service_healthy
 
+  customer-service:
+    restart: always
+    build: ../customer_service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-customer-db:5432/customer_manager
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 1234
+    ports:
+      - 8081:8081
+    depends_on:
+      postgres-customer-db:
+        condition: service_healthy
+
   mongo-express:
     image: mongo-express
     ports:
@@ -48,7 +61,26 @@ services:
     volumes:
       - mongo:/data/db
 
+  postgres-customer-db:
+    image: postgres:13
+    container_name: postgres-customer-db
+    environment:
+      POSTGRES_DB: customer_manager
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 
 volumes:
   mongo:
   rabbitmq:
+  postgres:
