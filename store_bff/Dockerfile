@@ -1,5 +1,8 @@
 # Etapa de build com Maven
-FROM maven:3.8.4-openjdk-17-slim AS build
+FROM openjdk:21-slim AS build
+
+# Instalar Maven manualmente
+RUN apt-get update && apt-get install -y maven && rm -rf /var/lib/apt/lists/*
 
 # Copiar código fonte e pom.xml
 COPY src /app/src
@@ -11,13 +14,11 @@ WORKDIR /app
 # Rodar o Maven para compilar o projeto e gerar o arquivo JAR
 RUN mvn clean install -DskipTests
 
-# Etapa final com imagem do OpenJDK 17
-FROM openjdk:17-jdk-slim
+# Etapa final com imagem do OpenJDK 21
+FROM openjdk:21-slim
 
 # Copiar o arquivo JAR gerado do contêiner de build
-COPY --from=build /app/target/customer-manager-0.0.1-SNAPSHOT.jar /app/customer-manager.jar
-
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+COPY --from=build /app/target/*.jar /app/store-bff.jar
 
 # Trabalhar no diretório /app
 WORKDIR /app
@@ -26,4 +27,4 @@ WORKDIR /app
 EXPOSE 8080
 
 # Comando para rodar a aplicação
-CMD ["java", "-jar", "customer-manager.jar"]
+CMD ["java", "-jar", "store-bff.jar"]
